@@ -3,15 +3,10 @@ import sys
 import time
 import sys
 import datetime
+import random
 
 OUTLET_TOP_PIN = 118
 OUTLET_BOTTOM_PIN = 120
-
-OUTLET_TOP_HOUR_ON = 9
-OUTLET_TOP_HOUR_OFF = 20
-
-OUTLET_BOTTOM_HOUR_ON = 6
-OUTLET_BOTTOM_HOUR_OFF = 22
 
 def main(args):
 	os.system( "sudo sh -c 'echo " + str(OUTLET_TOP_PIN) + " > /sys/class/gpio/export'" )
@@ -21,22 +16,42 @@ def main(args):
 	os.system( "sudo sh -c 'echo out > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/direction'" )
 
 	bRunning = True
-	currentHour = datetime.datetime.now().hour
 
 	while( bRunning ):
 		try:
-			currentHour = datetime.datetime.now().hour
-			if( currentHour < OUTLET_TOP_HOUR_ON or currentHour > OUTLET_TOP_HOUR_OFF ): # Should we turn outlet off?
-				os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
-			else:
-				os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
-
-			if( currentHour < OUTLET_BOTTOM_HOUR_ON or currentHour > OUTLET_BOTTOM_HOUR_OFF ): # Should we turn outlet off?
-                                os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
-                        else:
-                                os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
-			
 			time.sleep(1)
+			print("Turn top and bottom off")
+			os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
+			os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
+			time.sleep( random.randint(10,30) )
+			print("Turn top and bottom on")
+			os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
+			os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
+	
+			time.sleep(20)
+			os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
+			time.sleep( random.randint(10,30) )
+			os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )			
+
+			time.sleep(10)
+			os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
+			time.sleep( random.randint(10,30) )
+			os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
+
+			time.sleep(30)
+			os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
+                        time.sleep( random.randint(10,30) )
+                        os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
+
+			time.sleep(5)
+			os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
+                        time.sleep( random.randint(10,30) )
+                        os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_BOTTOM_PIN) + "/value'" )
+
+			time.sleep(45)
+                        os.system( "sudo sh -c 'echo 1 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
+                        time.sleep( random.randint(10,30) )
+                        os.system( "sudo sh -c 'echo 0 > /sys/class/gpio/gpio" + str(OUTLET_TOP_PIN) + "/value'" )
 			
 		except KeyboardInterrupt:
 			bRunning = False
